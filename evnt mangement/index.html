@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Management</title>
+  <link rel="stylesheet" href="style1.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    header, footer {
+      background-color: #4b73ad;
+      color: white;
+      text-align: center;
+      padding: 1em 0;
+    }
+    nav {
+      background: #6e89c9;
+      padding: 0.5em;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      margin: 0 1em;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    section {
+      padding: 1.5em;
+    }
+    form {
+      margin-top: 1em;
+      background: #fff;
+      padding: 1em;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5em;
+    }
+    .custom-section img {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      margin-top: 1em;
+      border-radius: 8px;
+    }
+    .cart, .payment {
+      margin-top: 2em;
+      background: #fff;
+      padding: 1.5em;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+    }
+    .success {
+      color: green;
+      font-weight: bold;
+      margin-top: 1em;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 1em;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    input, select {
+      padding: 0.5em;
+      width: 100%;
+      margin-top: 0.25em;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Event Management Portal</h1>
+  <p>Your Dream Event, Our Mission</p>
+</header>
+
+<nav>
+  <a href="login11.html">login1</a>
+  <a href="register.html">register</a>
+  <a href="live.html"> live chat</a>
+  <a href="#home">Home</a>
+  <a href="#customization">Event Customization</a>
+  <a href="feedback.html">feedback</a>
+  <a href="cal.html"> event calender</a>
+  <a href="gift page .html">gifts page</a>
+</nav>
+
+<section id="home">
+  <h2>Welcome to Our Event Management System</h2>
+  <p>Plan and customize your dream event with ease!</p>
+</section>
+
+<section id="customization" class="custom-section">
+  <h2>Event Customization</h2>
+  <form id="customForm">
+    <label>Budget: <input type="number" id="budget" required></label>
+    <label>Date: <input type="date" required></label>
+    <label>Event Type:
+      <select id="eventType">
+        <option value="birthday">Birthday</option>
+        <option value="wedding">Wedding</option>
+        <option value="cradle">Cradle Ceremony</option>
+        <option value="housewarming">House Warming</option>
+        <option value="halfsaree">Half Saree Function</option>
+      </select>
+    </label>
+    <label>Catering:
+      <select>
+        <option value="veg">Veg</option>
+        <option value="nonveg">Non-Veg</option>
+      </select>
+    </label>
+    <label>Activities:<br>
+      <input type="checkbox" value="Singing"> Singing<br>
+      <input type="checkbox" value="Dancing"> Dancing<br>
+      <input type="checkbox" value="Games"> Games<br>
+    </label>
+    <button type="button" onclick="showImage()">Show Decoration</button>
+  </form>
+
+  <div id="imagePreview"></div>
+
+  <div class="cart">
+    <h3>Cart</h3>
+    <p>Selected Event Details</p>
+    <ul>
+      <li>Budget: <span id="cartBudget"></span></li>
+      <li>Event Type: <span id="cartEvent"></span></li>
+      <li>Activities: <span id="cartActivities"></span></li>
+      <li>Total: ₹<span id="cartTotal"></span></li>
+    </ul>
+    <button onclick="proceedToPayment()">Proceed to Payment</button>
+  </div>
+
+  <div class="payment" id="paymentSection" style="display:none;">
+    <h3>Online Payment</h3>
+    <p>Total: ₹<span id="finalAmount"></span></p>
+    <p>Choose Payment Method:</p>
+    <button onclick="chooseCard('PhonePe')">PhonePe</button>
+    <button onclick="chooseCard('Google Pay')">Google Pay</button>
+    <button onclick="chooseCard('Credit Card')">Credit Card</button>
+    <button onclick="chooseCard('Debit Card')">Debit Card</button>
+
+    <div id="cardDetails" style="display:none; margin-top: 1em;">
+      <label>Card Number: <input type="text" id="cardNumber" required></label>
+      <label>Expiry Date: <input type="text" id="expiry" placeholder="MM/YY" required></label>
+      <label>CVV: <input type="text" id="cvv" required></label>
+      <button onclick="makePayment('Card')">Pay Now</button>
+    </div>
+
+    <p id="paymentStatus"></p>
+  </div>
+</section>
+
+<!-- Logout Button -->
+<div style="text-align: center; margin: 2em;">
+  <button id="logoutButton">Logout</button>
+</div>
+
+<footer>
+  <p>&copy; 2025 Event Management Services. All rights reserved.</p>
+</footer>
+
+<script>
+function showImage() {
+  const budget = parseInt(document.getElementById('budget').value);
+  const eventType = document.getElementById('eventType').value;
+  const activities = Array.from(document.querySelectorAll('input[type=checkbox]:checked')).map(cb => cb.value);
+
+  if (eventType === 'wedding' && budget <= 10000) {
+    alert('Wedding event is not available for budget ₹10,000 or less.');
+    return;
+  }
+
+  const img = document.createElement('img');
+  if (budget >= 50000) {
+    img.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTq_a9Oo9uBEWDzElHnCDVMUiMMf0r0fHm4Qw&s';
+  } else if (budget >= 20000) {
+    img.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuvl8B0MBAjFkgjzMu5h9nLSXyENMnv810gw&s';
+  } else {
+    img.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPBPbo_02j4hCJaoXOYpSInq6a50G4HbJC_A&s';
+  }
+
+  const preview = document.getElementById('imagePreview');
+  preview.innerHTML = '';
+  preview.appendChild(img);
+
+  document.getElementById('cartBudget').innerText = budget;
+  document.getElementById('cartEvent').innerText = eventType.charAt(0).toUpperCase() + eventType.slice(1);
+  document.getElementById('cartActivities').innerText = activities.join(', ');
+  document.getElementById('cartTotal').innerText = budget;
+}
+
+function proceedToPayment() {
+  document.getElementById('paymentSection').style.display = 'block';
+  document.getElementById('finalAmount').innerText = document.getElementById('cartTotal').innerText;
+}
+
+function chooseCard(method) {
+  if (method === 'Credit Card' || method === 'Debit Card') {
+    document.getElementById('cardDetails').style.display = 'block';
+  } else {
+    makePayment(method);
+  }
+}
+
+function makePayment(method) {
+  if (method === 'Card') {
+    const cardNumber = document.getElementById('cardNumber').value;
+    const expiry = document.getElementById('expiry').value;
+    const cvv = document.getElementById('cvv').value;
+
+    if (!cardNumber || !expiry || !cvv) {
+      alert('Please enter all card details.');
+      return;
+    }
+  }
+  document.getElementById('paymentStatus').innerHTML = `✅ Payment Successful! Your event is confirmed.`;
+  document.getElementById('paymentStatus').className = 'success';
+}
+
+document.getElementById('logoutButton').addEventListener('click', () => {
+  localStorage.removeItem('token');  // Remove JWT from localStorage
+  alert('You have been logged out');
+  window.location.href = 'login11.html';  // Redirect to login page
+});
+</script>
+
+</body>
+</html>

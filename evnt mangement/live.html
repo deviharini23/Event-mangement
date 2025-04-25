@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Chat Support ✨</title>
+    <style>
+        body {
+            font-family: 'Verdana', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #eef2f3;
+        }
+
+        #chatContainer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 320px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chatHeader {
+            background-color: #6200ea;
+            color: #fff;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        #chatMessages {
+            padding: 12px;
+            height: 320px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+        }
+
+        .message {
+            margin: 6px 0;
+            padding: 10px;
+            border-radius: 8px;
+            width: fit-content;
+            max-width: 85%;
+        }
+
+        .user-message {
+            background-color: #bbdefb;
+            align-self: flex-end;
+        }
+
+        .bot-message {
+            background-color: #d1c4e9;
+            align-self: flex-start;
+        }
+
+        #chatInput {
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            border-top: 1px solid #ddd;
+            background-color: #fafafa;
+        }
+
+        .quick-response-buttons {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        #chatInput button {
+            background-color: #6200ea;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            flex-grow: 1;
+        }
+
+        #chatInput button:hover {
+            background-color: #4500b3;
+        }
+
+        #chatTextInput {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-top: 6px;
+            font-size: 14px;
+        }
+
+        #sendButton {
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        #sendButton:hover {
+            background-color: #4500b3;
+        }
+
+        #directContact {
+            background-color: #f44336;
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            margin-top: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #directContact:hover {
+            background-color: #c62828;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="chatContainer">
+        <div id="chatHeader">✨ Live Chat Support ✨</div>
+        <div id="chatMessages">
+            <div class="bot-message message">✨ Hello! How can I assist you today?</div>
+        </div>
+        <div id="chatInput">
+            <div class="quick-response-buttons">
+                <button onclick="handleQuickResponse('login')"> 🔑 Login Issue</button>
+                <button onclick="handleQuickResponse('register')"> 📋 Registration Issue</button>
+                <button onclick="handleQuickResponse('payment')"> 💳 Payment Issue</button>
+            </div>
+            <input type="text" id="chatTextInput" placeholder="📝 Type your issue here..." />
+            <button id="sendButton" onclick="handleCustomResponse()">📩 Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+
+        function appendMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', type === 'user' ? 'user-message' : 'bot-message');
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function handleQuickResponse(issueType) {
+            let response = '';
+
+            switch (issueType) {
+                case 'login':
+                    appendMessage('🔑 I am having trouble logging in.', 'user');
+                    response = 'If you’re having trouble logging in, please ensure that your credentials are correct. Try resetting your password if the issue persists.';
+                    break;
+                case 'register':
+                    appendMessage('📋 I am having trouble with registration.', 'user');
+                    response = 'For registration issues, please check that all required fields are filled out correctly. Contact support if the problem continues.';
+                    break;
+                case 'payment':
+                    appendMessage('💳 I am having a payment issue.', 'user');
+                    response = 'For payment issues, please check your card details and ensure sufficient balance. If you continue to face issues, reach out to us directly.';
+                    break;
+            }
+
+            setTimeout(() => {
+                appendMessage(response, 'bot');
+                if (issueType === 'payment') {
+                    showDirectContact();
+                }
+            }, 500);
+        }
+
+        function handleCustomResponse() {
+            const userInput = document.getElementById('chatTextInput').value;
+            if (userInput.trim() === '') return;
+
+            appendMessage(userInput, 'user');
+            document.getElementById('chatTextInput').value = '';
+
+            setTimeout(() => {
+                const response = 'Thank you for reaching out! 📞 For further assistance, please contact customer support at 1800-123-456.';
+                appendMessage(response, 'bot');
+                showDirectContact();
+            }, 500);
+        }
+
+        function showDirectContact() {
+            const contactDiv = document.createElement('div');
+            contactDiv.id = 'directContact';
+            contactDiv.textContent = '☎ Need further help? Connect to Customer Care: 1800-123-456';
+            chatMessages.appendChild(contactDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+
+</body>
+
+</html>

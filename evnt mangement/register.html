@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      padding: 20px;
+    }
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      background-color: #28a745;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #ccc;
+    }
+    header, footer {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Register Page</h1>
+  </header>
+
+  <section>
+    <form id="registerForm">
+      <label>
+        Name:
+        <input type="text" id="name" required>
+      </label>
+      <label>
+        Email:
+        <input type="email" id="email" required>
+      </label>
+      <label>
+        Password:
+        <input type="password" id="password" required>
+      </label>
+      <label>
+        Confirm Password:
+        <input type="password" id="confirmPassword" required>
+      </label>
+      <button type="submit" id="submitBtn">Register</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Event Management Services</p>
+  </footer>
+
+  <script>
+    function validateEmail(email) {
+      const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      return pattern.test(email);
+    }
+
+    async function registerUser(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const button = document.getElementById('submitBtn');
+
+      if (!validateEmail(email)) {
+        alert('Invalid email format');
+        return;
+      }
+
+      if (password.length < 6) {
+        alert('Password must be at least 6 characters');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Registering...";
+
+      try {
+        const response = await fetch('http://localhost:3000/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name, email, password })
+        });
+
+        const data = await response.json();
+        alert(data.message);
+
+        if (data.success) {
+          window.location.href = 'login11.html';
+        }
+      } catch (error) {
+        alert('Server error. Please try again.');
+        console.error(error);
+      }
+
+      button.disabled = false;
+      button.textContent = "Register";
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', registerUser);
+  </script>
+
+</body>
+</html>

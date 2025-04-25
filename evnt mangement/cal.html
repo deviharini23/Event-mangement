@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Management Calendar</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #0d0d1a;
+      color: white;
+      text-align: center;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      padding: 20px;
+      font-size: 28px;
+      border-radius: 10px;
+    }
+
+    .month-selector {
+      margin: 20px auto;
+    }
+
+    select {
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: auto;
+      margin-top: 30px;
+    }
+
+    .day {
+      background-color: #f8c471;
+      color: #1a1a2e;
+      padding: 15px;
+      border-radius: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100px;
+      position: relative;
+    }
+
+    .day:hover {
+      background-color: #f39c12;
+      box-shadow: 0 0 12px #ffedbc;
+    }
+
+    .vacancies {
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .options {
+      background-color: #ff4b2b;
+      color: white;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 10px;
+      display: none;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    .day.expanded .options {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  Event Management Calendar
+</header>
+
+<div class="month-selector">
+  <select id="monthSelect" onchange="showCalendar()">
+    <option value="">Select a Month</option>
+    <option value="January">January</option>
+    <option value="February">February</option>
+    <option value="March">March</option>
+    <option value="April">April</option>
+    <option value="May">May</option>
+    <option value="June">June</option>
+    <option value="July">July</option>
+    <option value="August">August</option>
+    <option value="September">September</option>
+    <option value="October">October</option>
+    <option value="November">November</option>
+    <option value="December">December</option>
+  </select>
+</div>
+
+<div class="calendar" id="calendarContainer"></div>
+
+<script>
+  function showCalendar() {
+    const calendarContainer = document.getElementById('calendarContainer');
+    calendarContainer.innerHTML = '';
+    calendarContainer.style.display = 'grid';
+
+    for (let day = 1; day <= 30; day++) {
+      calendarContainer.innerHTML += `
+        <div class="day" id="day-${day}" onclick="toggleDay(${day})">
+          <div>${day}</div>
+          <div class="vacancies">Available Events</div>
+          <div class="options" id="options-${day}">
+            <p>Weddings: 5</p>
+            <p>Birthdays: 3</p>
+            <p>Cradle Ceremonies: 2</p>
+            <p>Half Saree Ceremonies: 4</p>
+            <p>Naming Ceremonies: 2</p>
+            <p>Personal Events: 3</p>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  function toggleDay(day) {
+    const totalDays = 30;
+    for (let i = 1; i <= totalDays; i++) {
+      const dayBox = document.getElementById(`day-${i}`);
+      if (i === day) {
+        dayBox.classList.toggle('expanded');
+      } else {
+        dayBox.classList.remove('expanded');
+      }
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gift Selection</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f8f9fa, #e0eafc);
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      background-color: white;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      text-align: left;
+    }
+
+    input[type="number"],
+    select,
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .results {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .gift-card {
+      background-color: #f1f1f1;
+      padding: 12px;
+      margin: 8px 0;
+      border-left: 5px solid #4CAF50;
+      border-radius: 8px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Select Your Budget & Category</h2>
+
+    <label for="budget">Enter Budget:</label>
+    <input type="number" id="budget" placeholder="Enter your budget in ₹" min="1" required />
+
+    <label for="category">Select Category:</label>
+    <select id="category">
+      <option value="marriage">Marriage</option>
+      <option value="birthday">Birthday</option>
+      <option value="half_saree">Half Saree Function</option>
+      <option value="anniversary">Anniversary</option>
+    </select>
+
+    <button onclick="getGifts()">Find Gifts</button>
+
+    <div class="results" id="results"></div>
+  </div>
+
+  <footer>
+    &copy; 2025 Event Management Services. All rights reserved.
+  </footer>
+
+  <script>
+    function getGifts() {
+      const budget = parseInt(document.getElementById('budget').value);
+      const category = document.getElementById('category').value;
+      const results = document.getElementById('results');
+
+      const gifts = {
+        marriage: [
+          { name: "Silver Coin", price: 500 },
+          { name: "Dinner Set", price: 2000 },
+          { name: "Customized Photo Frame", price: 1000 },
+          { name: "Home Decor Set", price: 3000 }
+        ],
+        birthday: [
+          { name: "Personalized Mug", price: 500 },
+          { name: "Bluetooth Speaker", price: 1500 },
+          { name: "Gift Hamper", price: 2500 },
+          { name: "Smart Watch", price: 5000 }
+        ],
+        half_saree: [
+          { name: "Jewelry Set", price: 2500 },
+          { name: "Designer Saree", price: 4000 },
+          { name: "Ethnic Handbag", price: 1500 },
+          { name: "Perfume Set", price: 1000 }
+        ],
+        anniversary: [
+          { name: "Couple Watch Set", price: 3000 },
+          { name: "Romantic Dinner Voucher", price: 4000 },
+          { name: "Personalized Canvas Art", price: 2000 },
+          { name: "Luxury Chocolate Box", price: 1000 }
+        ]
+      };
+
+      results.innerHTML = "<h3>Gift Suggestions:</h3>";
+      const filteredGifts = gifts[category].filter(gift => gift.price <= budget);
+
+      if (filteredGifts.length === 0) {
+        results.innerHTML += "<p>No gifts available in this budget.</p>";
+      } else {
+        filteredGifts.forEach(gift => {
+          results.innerHTML += `<div class="gift-card">${gift.name} - ₹${gift.price}</div>`;
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>

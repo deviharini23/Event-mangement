@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    header {
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      text-align: center; /* Align the heading to the left corner */
+      font-size: 2em;
+      color: #333;
+    }
+
+    section {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    p {
+      font-size: 1em;
+      margin-bottom: 15px;
+    }
+
+    a {
+      text-decoration: none;
+      color: #007BFF;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-size: 1.1em;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      padding: 10px;
+      font-size: 1em;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 1.2em;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #666;
+    }
+  </style>
+  <script>
+    // Email validation regex pattern
+    function validateEmail(email) {
+      const pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      return pattern.test(email);
+    }
+
+    // Login handler function
+    function loginUser(event) {
+      event.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+  
+      // Validate email format
+      if (!validateEmail(email)) {
+        alert('Invalid email format');
+        return;
+      }
+
+      // Fetch request to login route
+      fetch('http://localhost:5000/api/login', {  // Ensure the correct URL and port
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message); // Show message from backend
+        if (data.token) {  // Check if token is received (indicating success)
+          localStorage.setItem('token', data.token);  // Save token for future use
+          window.location.href = 'index.html'; // Redirect to homepage
+        }
+      })
+      .catch(error => {
+        console.error("Error during login:", error);
+        alert('An error occurred while logging in. Please try again.');
+      });
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>Login Page</h1>
+  </header>
+  <section>
+    <p>If you're new, please <a href="register.html">register here</a>.</p>
+    <form onsubmit="loginUser(event)">
+      <label>Email: 
+        <input type="email" id="email" required placeholder="Enter your email" />
+      </label><br>
+      <label>Password: 
+        <input type="password" id="password" required placeholder="Enter your password" />
+      </label><br>
+      <button type="submit">Login</button>
+    </form>
+  </section>
+  <footer>
+    <p>&copy; 2025 Event Management Services</p>
+  </footer>
+</body>
+</html>
